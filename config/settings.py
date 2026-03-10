@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+import dj_database_url
 import os 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -40,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     #librerias añadidas 
     'rest_framework',
-    'users',
+    'cuentas',# manejo de todo el inicio y registro de usuarios internos de la empresa. 
 ]
 
 MIDDLEWARE = [
@@ -79,24 +80,12 @@ WSGI_APPLICATION = 'config.wsgi.application'
 # Database logic
 # Si existe DATABASE_URL (definida en docker-compose), usamos PostgreSQL. 
 # De lo contrario, usamos SQLite para pruebas rápidas locales.
-if os.environ.get('DATABASE_URL'):
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'cenesp_db',
-            'USER': 'miche_user',
-            'PASSWORD': 'tu_password_segura',
-            'HOST': 'db', # El nombre del servicio en docker-compose.yml
-            'PORT': '5432',
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
+DATABASES = {
+    'default': dj_database_url.config(
+        default='postgres://postgres:689447@localhost:5432/cenesp_db',
+        conn_max_age=600
+    )
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -133,4 +122,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / 'staticfiles' # Recomendado para cuando despliegues
+STATIC_ROOT = BASE_DIR / 'staticfiles' # Para el Deploy 
+
+# Autenticacion de usuario 
+AUTH_USER_MODEL = 'cuentas.Usuario'
+

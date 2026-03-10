@@ -1,7 +1,22 @@
 Para guardar las librerias utilizadas en el entorno VENV
-
 pip freeze > requirements.txt
 
 Para cargar las librerias en colaborativo
-
 pip install -r requirements.txt
+
+Crear entorno virtual
+python -m venv env
+
+Activar entorno virtual de VENV
+.\venv\Scripts\Activate
+
+Actualizar pip
+python.exe -m pip install --upgrade pip
+
+cuenta de superuser
+
+Nom usuario: admin
+Correo: admin2026@gmail.com
+Nombre: admin
+Apellido p: cei
+Password: admin123456-

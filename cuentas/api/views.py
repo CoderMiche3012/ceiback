@@ -19,7 +19,7 @@ class RegistroUsuarioView(generics.CreateAPIView):
 class UsuarioViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
-    # permission_classes = [IsAuthenticated] # <- Lo descomentaremos cuando configuremos los tokens
+    permission_classes = [IsAuthenticated] # <- Lo descomentaremos cuando configuremos los tokens
 
 class RolViewSet(viewsets.ModelViewSet):
     queryset = Rol.objects.all()

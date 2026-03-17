@@ -20,3 +20,6 @@ Correo: admin2026@gmail.com
 Nombre: admin
 Apellido p: cei
 Password: admin123456-
+
+Crear roles y permisos automaticamente
+python manage.py setup_roles

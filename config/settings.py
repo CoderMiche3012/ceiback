@@ -127,3 +127,20 @@ STATIC_ROOT = BASE_DIR / 'staticfiles' # Para el Deploy
 # Autenticacion de usuario 
 AUTH_USER_MODEL = 'cuentas.Usuario'
 
+# Configuración global de Django REST Framework
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+# Configuración de los Tokens
+from datetime import timedelta
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1), # El token dura 1 día
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'AUTH_HEADER_TYPES': ('Bearer',),
+
+    'USER_ID_FIELD': 'id_usuario', # Le decimos que busque tu campo personalizado
+    'USER_ID_CLAIM': 'user_id',    # Así se llamará la variable dentro del token
+}

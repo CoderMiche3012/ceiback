@@ -2,7 +2,9 @@ import re
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from cuentas.models import Rol, Permiso
-
+#biblioteca para peticion de login 
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework.exceptions import AuthenticationFailed
 Usuario = get_user_model()
 
 class PermisoSerializer(serializers.ModelSerializer):
@@ -76,3 +78,23 @@ class UsuarioSerializer(serializers.ModelSerializer):
             id_rol=validated_data.get('id_rol', None)
         )
         return usuario
+
+# optimización de peticion de token para login 
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        # Primero, dejamos que SimpleJWT valide el usuario y genere el 'access' y 'refresh'
+        data = super().validate(attrs)
+        #validamos si el usuario esta activo. 
+        if not self.user.estatus:
+            raise AuthenticationFailed('Esta cuenta ha sido desactivada. Contacta al administrador del sistema.')
+        # Luego, inyectamos tu bloque exacto de "user" a la respuesta
+        data['user'] = {
+            'id': self.user.id_usuario,
+            'nombre': self.user.nombre,
+            'correo': self.user.correo,
+            # Extraemos el nombre del rol si el usuario tiene uno asignado, si no, devolvemos null
+            'rol': self.user.id_rol.nombre_rol if self.user.id_rol else None, 
+            'estatus': self.user.estatus # Se lo mandamos al front por si quiere usarlo visualmente
+        }
+
+        return data

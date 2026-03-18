@@ -3,7 +3,9 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from django.contrib.auth import get_user_model
 from cuentas.models import Rol, Permiso
 from .serializers import UsuarioSerializer, RolSerializer, PermisoSerializer
-
+#bibliotecas para peticion de tokens en login 
+from rest_framework_simplejwt.views import TokenObtainPairView
+from .serializers import CustomTokenObtainPairSerializer
 Usuario = get_user_model()
 
 # 1. Vista específica para el Registro de Usuarios
@@ -28,3 +30,7 @@ class RolViewSet(viewsets.ModelViewSet):
 class PermisoViewSet(viewsets.ModelViewSet):
     queryset = Permiso.objects.all()
     serializer_class = PermisoSerializer
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    # Le decimos que use tu serializador con los datos extra
+    serializer_class = CustomTokenObtainPairSerializer

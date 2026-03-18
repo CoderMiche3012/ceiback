@@ -39,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    #librerias de cors para react 
+    'corsheaders',
     #librerias añadidas 
     'rest_framework',
     'cuentas',# manejo de todo el inicio y registro de usuarios internos de la empresa. 
@@ -46,6 +48,8 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    #añadido de cors 
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -137,10 +141,21 @@ REST_FRAMEWORK = {
 # Configuración de los Tokens
 from datetime import timedelta
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(days=1), # El token dura 1 día
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=15), 
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=30),
     'AUTH_HEADER_TYPES': ('Bearer',),
 
-    'USER_ID_FIELD': 'id_usuario', # Le decimos que busque tu campo personalizado
-    'USER_ID_CLAIM': 'user_id',    # Así se llamará la variable dentro del token
+    'USER_ID_FIELD': 'id_usuario', 
+    'USER_ID_CLAIM': 'user_id',    
 }
+
+#configuracion de cors
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",#React
+    "http://127.0.0.1:3000",
+    "http://localhost:5173",#React con Vite
+    "http://127.0.0.1:5173",
+]
+
+#permite que React envíe cookies o tokens especiales si los necesita
+CORS_ALLOW_CREDENTIALS = True

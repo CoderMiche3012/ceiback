@@ -34,12 +34,15 @@ class UsuarioSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("El teléfono debe contener exactamente 10 números.")
         return value
 
-    # 2. Validación de la Contraseña (Seguridad fuerte)
+   # 2. Validación de la Contraseña (Seguridad fuerte)
     def validate_password(self, value):
-        # Mínimo 8 caracteres, al menos una letra y un número
-        patron = r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$'
+        patron = r'^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[-/#$_@*!?])[A-Za-z\d\-/#$_@*!?]{8,}$'
+        
         if not re.match(patron, value):
-            raise serializers.ValidationError("La contraseña debe tener al menos 8 caracteres, incluyendo una letra y un número.")
+            raise serializers.ValidationError(
+                "La contraseña debe tener al menos 8 caracteres, incluyendo una letra mayúscula, "
+                "una minúscula, un número y un carácter especial válido (-/#$_)."
+            )
         return value
 
     # 3. Validación del Nombre de Usuario (Sin espacios, solo letras, números y guiones bajos)

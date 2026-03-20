@@ -18,16 +18,20 @@ class RolSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class UsuarioSerializer(serializers.ModelSerializer):
+    password_actual = serializers.CharField(write_only=True, required=False)
+    confirm_password = serializers.CharField(write_only=True, required=False)
+
     class Meta:
         model = Usuario
+        # 2. lista actualizada con los pass
         fields = [
             'id_usuario', 'nom_usuario', 'nombre', 'apellido_p', 
-            'apellido_m', 'correo', 'telefono', 'id_rol', 'estatus', 'password'
+            'apellido_m', 'correo', 'telefono', 'id_rol', 'estatus', 
+            'password', 'password_actual', 'confirm_password' 
         ]
         extra_kwargs = {
-            'password': {'write_only': True} # Oculta la contraseña en las respuestas
+            'password': {'write_only': True, 'required': False}
         }
-
     # 1. Validación del Teléfono (Exactamente 10 dígitos)
     def validate_telefono(self, value):
         if value and not re.match(r'^\d{10}$', value):

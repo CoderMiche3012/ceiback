@@ -105,7 +105,8 @@ class UsuarioSerializer(serializers.ModelSerializer):
             if self.instance:
                 # Revisamos si es el súper admin
                 request_user = self.context['request'].user
-                es_admin = request_user.is_superuser 
+                # Revisamos si es el súper admin de Django O tiene el rol de Administrador
+                es_admin = request_user.is_superuser or (request_user.id_rol and request_user.id_rol.nombre_rol == 'Administrador')
 
                 # Si NO es súper admin, exigimos la clave actual
                 if not es_admin:

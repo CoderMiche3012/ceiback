@@ -7,6 +7,7 @@ from .serializers import UsuarioSerializer, RolSerializer, PermisoSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import CustomTokenObtainPairSerializer
 Usuario = get_user_model()
+from .permissions import EsAdminODueno
 
 # 1. Vista específica para el Registro de Usuarios
 class RegistroUsuarioView(generics.CreateAPIView):
@@ -14,6 +15,8 @@ class RegistroUsuarioView(generics.CreateAPIView):
     serializer_class = UsuarioSerializer
     # Por ahora dejamos que cualquiera se registre. 
     # En el futuro podríamos limitarlo a que solo un 'Administrador' pueda crear cuentas.
+    
+    # ---> CAMBIO 1: Dejamos la puerta abierta para el registro
     permission_classes = [AllowAny] 
 
 # 2. ViewSets para el CRUD general (Administración)
@@ -21,7 +24,10 @@ class RegistroUsuarioView(generics.CreateAPIView):
 class UsuarioViewSet(viewsets.ModelViewSet):
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
-    permission_classes = [IsAuthenticated] # <- Lo descomentaremos cuando configuremos los tokens
+    
+    # ---> CAMBIO 2: Aquí ponemos a tu cadenero personalizado
+    # Protege las rutas de edición para que nadie modifique a otros (salvo los jefes)
+    permission_classes = [IsAuthenticated, EsAdminODueno] 
 
 class RolViewSet(viewsets.ModelViewSet):
     queryset = Rol.objects.all()

@@ -86,32 +86,41 @@ class UsuarioSerializer(serializers.ModelSerializer):
         )
         return usuario
 
-    # ACTUALIZACION DE DATOS PERSONALES 
+# ACTUALIZACION DE DATOS PERSONALES Y CONTRASEÑAS
     def validate(self, data):
-        # 2. Lógica para cuando se EDITA un perfil existente (self.instance tiene datos)
-        if self.instance:
-            # Extraemos la contraseña actual que manda React
-            password_actual = data.pop('password_actual', None)
-            
-            # Validamos que la contraseña actual sea la correcta
-            if password_actual:
-                if not self.instance.check_password(password_actual):
-                    raise serializers.ValidationError({
-                        "password_actual": "Contraseña incorrecta. No se pueden guardar los cambios."
-                    })
-            else:
-                # Obligamos a React a siempre mandar la contraseña actual para editar
-                raise serializers.ValidationError({
-                    "password_actual": "Debes ingresar tu contraseña actual para autorizar los cambios."
-                })
 
-        # 3. Lógica para cuando mandan contraseñas nuevas (Registro o Cambio)
-        if 'password' in data and 'confirm_password' in data:
-            if data['password'] != data['confirm_password']:
+        password = data.get('password')
+        confirm_password = data.get('confirm_password')
+        password_actual = data.pop('password_actual', None)
+
+
+        if password:
+            # A. Validamos que las nuevas contraseñas coincidan
+            if password != confirm_password:
                 raise serializers.ValidationError({
                     "confirm_password": "Las contraseñas no coinciden. Por favor, verifica."
                 })
 
+            # B. Lógica de permisos de edición (cuando el perfil ya existe)
+            if self.instance:
+                # Revisamos si es el súper admin
+                request_user = self.context['request'].user
+                es_admin = request_user.is_superuser 
+
+                # Si NO es súper admin, exigimos la clave actual
+                if not es_admin:
+                    if not password_actual:
+                        raise serializers.ValidationError({
+                            "password_actual": "Debes ingresar tu contraseña actual para autorizar los cambios."
+                        })
+                    if not self.instance.check_password(password_actual):
+                        raise serializers.ValidationError({
+                            "password_actual": "Contraseña actual incorrecta."
+                        })
+
+        # 3. Limpiamos confirm_password al final
+        data.pop('confirm_password', None)
+        
         return data
     
     def update(self, instance, validated_data):
@@ -142,8 +151,11 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
             'nombre': self.user.nombre,
             'correo': self.user.correo,
             # Extraemos el nombre del rol si el usuario tiene uno asignado, si no, devolvemos null
-            'rol': self.user.id_rol.nombre_rol if self.user.id_rol else None, 
-            'estatus': self.user.estatus # Se lo mandamos al front por si quiere usarlo visualmente
+            'rol': self.user.id_rol.nombre_rol if self.user.id_rol else ('Súper Administrador' if self.user.is_superuser else None), 
+            'estatus': self.user.estatus, # Se lo mandamos al front por si quiere usarlo visualmente
+            'es_superadmin': self.user.is_superuser,
+            'es_staff': self.user.is_staff
         }
+        
 
         return data

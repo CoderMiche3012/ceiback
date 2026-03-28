@@ -44,6 +44,8 @@ INSTALLED_APPS = [
     #librerias añadidas 
     'rest_framework',
     'cuentas',# manejo de todo el inicio y registro de usuarios internos de la empresa. 
+    'periodos',#manejo de periodos anuales de la empresa.
+    'beneficiarios',#manejo de modulo de informacion de beneficiarios 
 ]
 
 MIDDLEWARE = [

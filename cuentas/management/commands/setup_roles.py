@@ -7,11 +7,11 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         self.stdout.write("Iniciando la configuración de roles y permisos...")
 
-        # 1. Definir los módulos y acciones basados en tu frontend
+
         modulos = ['Beneficiarios', 'Donadores', 'Postulantes', 'Cursos', 'Reportes', 'Usuarios']
         acciones = ['Ver', 'Crear', 'Editar', 'Eliminar']
 
-        # 2. Crear todos los permisos automáticamente
+        #permisos 
         permisos_creados = {}
         for modulo in modulos:
             for accion in acciones:

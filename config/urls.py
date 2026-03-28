@@ -20,5 +20,7 @@ from django.urls import path, include
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('api/cuentas/', include('cuentas.api.urls')), # Aquí conectamos tu API
+    path('api/cuentas/', include('cuentas.api.urls')), 
+    path('api/periodos/', include('periodos.api.urls')), 
+    path('api/beneficiarios/', include('beneficiarios.api.urls')),
 ]

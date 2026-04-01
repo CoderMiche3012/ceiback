@@ -2,7 +2,7 @@ from django.db import models
 
 class Periodo(models.Model):
     id_periodo = models.AutoField(primary_key=True)
-    ciclo_escolar = models.CharField(max_length=50, help_text="Ejemplo: 2025-2026")
+    ciclo_escolar = models.CharField(max_length=50, help_text="Ejemplo: 2025-A")
     fecha_inicio = models.DateField()
     fecha_fin = models.DateField()
     # Usamos un Boolean para el estado: True = Activo, False = Inactivo

@@ -45,10 +45,10 @@ class UsuarioManager(BaseUserManager):
 # 4.modelo de usuarios
 class Usuario(AbstractBaseUser, PermissionsMixin):
     id_usuario = models.AutoField(primary_key=True)
-    nom_usuario = models.CharField(max_length=50, unique=True) 
-    nombre = models.CharField(max_length=100)
-    apellido_p = models.CharField(max_length=100)
-    apellido_m = models.CharField(max_length=100, blank=True, null=True)
+    nom_usuario = models.CharField(max_length=20, unique=True) 
+    nombre = models.CharField(max_length=20)
+    apellido_p = models.CharField(max_length=15)
+    apellido_m = models.CharField(max_length=15, blank=True, null=True)
     correo = models.EmailField(unique=True)
     telefono = models.CharField(max_length=15, blank=True, null=True)
     estatus = models.BooleanField(default=True)

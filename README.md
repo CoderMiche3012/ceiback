@@ -105,6 +105,34 @@ Todas las rutas base para el frontend comienzan con: `http://127.0.0.1:8000/`
 | **PUT/PATCH**| `/api/cuentas/usuarios/{id}/` | Actualiza la información de un usuario. | ✅ Sí |
 | **DELETE** | `/api/cuentas/usuarios/{id}/` | Elimina a un usuario. | ✅ Sí |
 
+### 📚 Configuración Escolar (Sprint 2)
+| Método | Ruta | Descripción | Requiere Token |
+| :--- | :--- | :--- | :--- |
+| **GET** | `/api/periodos/periodos/` | Lista todos los periodos y ciclos escolares. | ✅ Sí |
+| **POST** | `/api/periodos/periodos/` | Crea un nuevo periodo (Valida formato YYYY-YYYY). | ✅ Sí |
+| **PUT/DELETE** | `/api/periodos/periodos/{id}/` | Modifica o elimina un periodo específico. | ✅ Sí |
+
+### 🧾 1. Flujo de Postulación (App Beneficiarios)
+| Método | Ruta | Descripción | Requiere Token |
+| :--- | :--- | :--- | :--- |
+| **GET/POST** | `/api/beneficiarios/direcciones/` | Gestiona las direcciones físicas. | ✅ Sí |
+| **GET/POST** | `/api/beneficiarios/expedientes/` | Gestiona los expedientes base (Datos personales + id_direccion). | ✅ Sí |
+| **GET/POST** | `/api/beneficiarios/postulantes/` | Ruta maestra: crea Dirección, Expediente y Postulante desde JSON anidado. | ✅ Sí |
+| **GET/POST** | `/api/beneficiarios/visitas/` | Agenda y gestiona las visitas domiciliarias de los postulantes. | ✅ Sí |
+
+### 📊 2. Estudio Socioeconómico (App Estudios)
+| Método | Ruta | Descripción | Requiere Token |
+| :--- | :--- | :--- | :--- |
+| **GET** | `/api/estudios/estudios/` | Obtiene la lista de estudios socioeconómicos realizados. | ✅ Sí |
+| **POST** | `/api/estudios/estudios/` | Ruta maestra: guarda Estudio, Familia, Vivienda, Gastos, Alimentación y Análisis. | ✅ Sí |
+| **GET/PUT** | `/api/estudios/estudios/{id}/` | Consulta o actualiza un estudio socioeconómico específico. | ✅ Sí |
+
+### ✅ 3. Aceptación Final
+| Método | Ruta | Descripción | Requiere Token |
+| :--- | :--- | :--- | :--- |
+| **GET/POST** | `/api/beneficiarios/beneficiarios/` | Convierte a un candidato en Beneficiario Oficial (usa id_expediente). | ✅ Sí |
+| **PUT/DELETE** | `/api/beneficiarios/beneficiarios/{id}/` | Gestiona el estatus y notas del beneficiario activo. | ✅ Sí |
+
 ### Roles y Permisos (Catálogos)
 | Método | Ruta | Descripción | Requiere Token |
 | :--- | :--- | :--- | :--- |

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.core.validators import RegexValidator
-from beneficiarios.models import Direccion, Expediente, Postulante, Visita_Postulante
+from beneficiarios.models import Direccion, Expediente, Postulante, Visita_Postulante, Beneficiario
 
 # --- Tus validadores se quedan igual ---
 letras_regex = RegexValidator(regex=r'^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$', message='Solo letras y espacios.')
@@ -53,4 +53,9 @@ class PostulanteSerializer(serializers.ModelSerializer):
 class VisitaPostulanteSerializer(serializers.ModelSerializer):
     class Meta:
         model = Visita_Postulante
+        fields = '__all__'
+
+class BeneficiarioSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Beneficiario
         fields = '__all__'

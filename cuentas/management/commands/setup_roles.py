@@ -9,7 +9,7 @@ class Command(BaseCommand):
 
 
         modulos = ['Beneficiarios', 'Donadores', 'Postulantes', 'Cursos', 'Reportes',
-                    'Usuarios', 'Roles', 'Permisos', 'Periodos']
+                    'Usuarios', 'Roles', 'Permisos', 'Periodos', 'Estudios']
         acciones = ['Ver', 'Crear', 'Editar', 'Eliminar']
 
         #permisos 

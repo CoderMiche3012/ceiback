@@ -1,7 +1,8 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
-from beneficiarios.models import Direccion, Expediente, Postulante, Visita_Postulante
-from .serializers import DireccionSerializer, ExpedienteSerializer, PostulanteSerializer, VisitaPostulanteSerializer
+from beneficiarios.models import Direccion, Expediente, Postulante, Visita_Postulante, Beneficiario
+from .serializers import DireccionSerializer, ExpedienteSerializer, PostulanteSerializer, VisitaPostulanteSerializer, BeneficiarioSerializer
+
 
 class DireccionViewSet(viewsets.ModelViewSet):
     queryset = Direccion.objects.all()
@@ -21,4 +22,11 @@ class PostulanteViewSet(viewsets.ModelViewSet):
 class VisitaPostulanteViewSet(viewsets.ModelViewSet):
     queryset = Visita_Postulante.objects.all()
     serializer_class = VisitaPostulanteSerializer
+    permission_classes = [IsAuthenticated]
+
+
+
+class BeneficiarioViewSet(viewsets.ModelViewSet):
+    queryset = Beneficiario.objects.all()
+    serializer_class = BeneficiarioSerializer
     permission_classes = [IsAuthenticated]

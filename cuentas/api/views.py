@@ -7,7 +7,7 @@ from .serializers import UsuarioSerializer, RolSerializer, PermisoSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from .serializers import CustomTokenObtainPairSerializer
 Usuario = get_user_model()
-from .permissions import EsAdminODueno
+from .permissions import EsAdminODueno, EsAdmin
 
 # 1. Vista específica para el Registro de Usuarios
 class RegistroUsuarioView(generics.CreateAPIView):
@@ -32,10 +32,12 @@ class UsuarioViewSet(viewsets.ModelViewSet):
 class RolViewSet(viewsets.ModelViewSet):
     queryset = Rol.objects.all()
     serializer_class = RolSerializer
+    permission_classes = [EsAdmin]
 
 class PermisoViewSet(viewsets.ModelViewSet):
     queryset = Permiso.objects.all()
     serializer_class = PermisoSerializer
+    permission_classes = [EsAdmin]
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     # Le decimos que use tu serializador con los datos extra

@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'cuentas',# manejo de todo el inicio y registro de usuarios internos de la empresa. 
     'periodos',# manejo de periodos anuales de la empresa.
     'beneficiarios',# manejo de modulo de informacion de beneficiarios 
+    'estudios',
 ]
 
 MIDDLEWARE = [

@@ -1,22 +1,34 @@
 from rest_framework import permissions
 
 class EsAdminODueno(permissions.BasePermission):
-    """
-    Permite que un usuario edite un perfil SOLO SI:
-    1. Es el Súper Admin de Django.
-    2. Tiene el rol de 'Administrador' en la base de datos.
-    3. Es el dueño de su propio perfil.
-    """
-    
+    # ... (Este se queda exactamente igual, no le muevas nada) ...
     def has_object_permission(self, request, view, obj):
-        # 1. Si es el Súper Admin (Tú), lo dejamos pasar a cualquier perfil
         if request.user.is_superuser:
             return True
-            
-        # 2. Si tiene el rol de Administrador, también lo dejamos pasar a cualquier perfil
         if request.user.id_rol and request.user.id_rol.nombre_rol == 'Administrador':
             return True
-            
-        # 3. Si es un usuario normal, SOLO pasa si el ID del perfil que intenta editar 
-        # es exactamente igual a su propio ID de usuario logueado.
         return obj.id_usuario == request.user.id_usuario
+
+
+class EsAdmin(permissions.BasePermission):
+    """
+    Permiso exclusivo para catálogos globales como Roles y Permisos.
+    SOLO el Súper Admin o el rol 'Administrador' pueden ver, agregar, editar o eliminar.
+    """
+    
+    def has_permission(self, request, view):
+        # 1. Protege la lista general (GET general) y la creación (POST)
+        if not request.user or not request.user.is_authenticated:
+            return False
+        
+        es_super = request.user.is_superuser
+        es_admin = request.user.id_rol and request.user.id_rol.nombre_rol == 'Administrador'
+        
+        return es_super or es_admin
+
+    def has_object_permission(self, request, view, obj):
+        # 2. Protege un rol en específico (GET por ID, PUT, PATCH, DELETE)
+        es_super = request.user.is_superuser
+        es_admin = request.user.id_rol and request.user.id_rol.nombre_rol == 'Administrador'
+        
+        return es_super or es_admin

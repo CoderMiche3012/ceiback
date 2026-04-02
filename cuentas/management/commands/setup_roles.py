@@ -8,7 +8,8 @@ class Command(BaseCommand):
         self.stdout.write("Iniciando la configuración de roles y permisos...")
 
 
-        modulos = ['Beneficiarios', 'Donadores', 'Postulantes', 'Cursos', 'Reportes', 'Usuarios']
+        modulos = ['Beneficiarios', 'Donadores', 'Postulantes', 'Cursos', 'Reportes',
+                    'Usuarios', 'Roles', 'Permisos', 'Periodos']
         acciones = ['Ver', 'Crear', 'Editar', 'Eliminar']
 
         #permisos 
@@ -30,7 +31,6 @@ class Command(BaseCommand):
             {'nombre': 'Trabajadora Social', 'desc': 'Gestión de beneficiarios'},
             {'nombre': 'Coordinación', 'desc': 'Supervisión y reportes'},
             {'nombre': 'Mesa Directiva', 'desc': 'Sólo lectura y auditoría'},
-            {'nombre': 'Instructor', 'desc': 'Gestión de cursos propios'},
         ]
 
         for rol_data in roles_data:

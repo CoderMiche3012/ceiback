@@ -72,6 +72,15 @@ class UsuarioSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError("El apellido materno solo debe contener letras.")
             return value
 
+    #correccion para que no se duplique el correo (brian@gmail.com y Brian@gmail.com)
+    def validate_correo(self, value):
+        correo_normalizado = value.lower()
+        
+        if Usuario.objects.filter(correo__iexact=correo_normalizado).exists():
+            raise serializers.ValidationError("Este correo ya está registrado. Por favor, utiliza otro.")
+            
+        return correo_normalizado
+
     # Creación segura del usuario
     def create(self, validated_data):
         usuario = Usuario.objects.create_user(

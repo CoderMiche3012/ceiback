@@ -141,22 +141,20 @@ class UsuarioSerializer(serializers.ModelSerializer):
 # optimización de peticion de token para login 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
-        # Primero, dejamos que SimpleJWT valide el usuario y genere el 'access' y 'refresh'
         data = super().validate(attrs)
-        #validamos si el usuario esta activo. 
-        if not self.user.estatus:
-            raise AuthenticationFailed('Esta cuenta ha sido desactivada. Contacta al administrador del sistema.')
-        # Luego, inyectamos tu bloque exacto de "user" a la respuesta
-        data['user'] = {
-            'id': self.user.id_usuario,
-            'nombre': self.user.nombre,
-            'correo': self.user.correo,
-            # Extraemos el nombre del rol si el usuario tiene uno asignado, si no, devolvemos null
-            'rol': self.user.id_rol.nombre_rol if self.user.id_rol else ('Súper Administrador' if self.user.is_superuser else None), 
-            'estatus': self.user.estatus, # Se lo mandamos al front por si quiere usarlo visualmente
-            'es_superadmin': self.user.is_superuser,
-            'es_staff': self.user.is_staff
-        }
+
+        data['id_usuario'] = self.user.id_usuario
+        data['nom_usuario'] = self.user.nom_usuario
         
+        if self.user.id_rol:
+            data['id_rol'] = self.user.id_rol.id_rol 
+            data['rol'] = self.user.id_rol.nombre_rol
+            
+            permisos = self.user.id_rol.permisos.values_list('nombre_permiso', flat=True)
+            data['permisos'] = list(permisos)
+        else:
+            data['id_rol'] = None 
+            data['rol'] = None
+            data['permisos'] = []
 
         return data

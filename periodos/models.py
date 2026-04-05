@@ -5,7 +5,6 @@ class Periodo(models.Model):
     ciclo_escolar = models.CharField(max_length=50, help_text="Ejemplo: 2025-A")
     fecha_inicio = models.DateField()
     fecha_fin = models.DateField()
-    # Usamos un Boolean para el estado: True = Activo, False = Inactivo
     estado = models.BooleanField(default=True) 
 
     class Meta:

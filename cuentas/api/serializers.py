@@ -154,6 +154,8 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
         data['id_usuario'] = self.user.id_usuario
         data['nom_usuario'] = self.user.nom_usuario
+        #sabe si es admin o nelson
+        data['is_admin'] = bool(self.user.is_superuser or (self.user.id_rol and self.user.id_rol.nombre_rol == 'Administrador'))
         
         if self.user.id_rol:
             data['id_rol'] = self.user.id_rol.id_rol 

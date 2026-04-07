@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.core.validators import RegexValidator
-from beneficiarios.models import Direccion, Expediente, Postulante, Visita_Postulante, Beneficiario
+from beneficiarios.models import Direccion, Expediente, Postulante, Visita_Postulante, Beneficiario, Fotografias
 
 # --- Tus validadores se quedan igual ---
 letras_regex = RegexValidator(regex=r'^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$', message='Solo letras y espacios.')
@@ -58,4 +58,17 @@ class VisitaPostulanteSerializer(serializers.ModelSerializer):
 class BeneficiarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Beneficiario
+        fields = '__all__'
+
+class FotografiasSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Fotografias
+        fields = '__all__'
+
+class ExpedienteSerializer(serializers.ModelSerializer):
+    # Agregamos esta línea para que devuelva la lista de fotos en modo lectura
+    fotografias = FotografiasSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Expediente
         fields = '__all__'

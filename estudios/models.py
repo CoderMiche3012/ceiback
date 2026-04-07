@@ -153,3 +153,62 @@ class Analisis(models.Model):
     class Meta:
         db_table = 'analisis'
         verbose_name_plural = 'Análisis'
+
+class Servicios_Vivienda(models.Model):
+    id_servicios = models.AutoField(primary_key=True)
+    localizacion_bano = models.CharField(max_length=100) # Ej. Adentro, Afuera, Compartido
+    drenaje = models.BooleanField(default=False)
+    tipo_drenaje = models.CharField(max_length=100, blank=True, null=True) # Ej. Fosa séptica, Red pública
+    servicios_basicos = models.CharField(max_length=255) # Ej. Agua potable, Recolección de basura
+    aparatos_electronicos = models.TextField(blank=True, null=True) # Ej. TV, Computadora
+    aparatos_electrodomesticos = models.TextField(blank=True, null=True) # Ej. Licuadora, Refri
+
+    # Conexión 1 a 1 con el estudio principal
+    id_estudio = models.OneToOneField(
+        Estudio_Socioeconomico, 
+        on_delete=models.CASCADE, 
+        db_column='id_estudio',
+        related_name='servicios_vivienda'
+    )
+
+    class Meta:
+        db_table = 'servicios_vivienda'
+
+class Sugerencias(models.Model):
+    id_sugerencias = models.AutoField(primary_key=True)
+    prioridad_servicio_social = models.CharField(max_length=50) # Ej. Alta, Media, Baja
+    nota_servicio_social = models.TextField(blank=True, null=True)
+
+    # Conexión 1 a 1 con el estudio principal
+    id_estudio = models.OneToOneField(
+        Estudio_Socioeconomico, 
+        on_delete=models.CASCADE, 
+        db_column='id_estudio',
+        related_name='sugerencias'
+    )
+
+    class Meta:
+        db_table = 'sugerencias'
+
+class Situacion_Familiar(models.Model):
+    id_situacion_familiar = models.AutoField(primary_key=True)
+    total_personas_casa = models.IntegerField()
+    estado_civil_padres = models.CharField(max_length=100)
+    hijos_diferente_padre = models.BooleanField(default=False)
+    madre_anticonceptivo = models.BooleanField(default=False)
+    familiar_enfermo = models.BooleanField(default=False)
+    diagnostico = models.CharField(max_length=255, blank=True, null=True) 
+    tipo_cuidados = models.CharField(max_length=255, blank=True, null=True)
+    nota_situacion_familiar = models.TextField(blank=True, null=True)
+    seguro_medico = models.BooleanField(default=False)
+
+    id_estudio = models.OneToOneField(
+        'Estudio_Socioeconomico', # Lo pongo entre comillas por si lo pegas antes de que la clase exista arriba
+        on_delete=models.CASCADE, 
+        db_column='id_estudio',
+        related_name='situacion_familiar'
+    )
+
+    class Meta:
+        db_table = 'situacion_familiar'
+        verbose_name_plural = 'Situaciones Familiares'

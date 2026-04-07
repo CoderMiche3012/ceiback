@@ -116,3 +116,21 @@ class Beneficiario(models.Model):
 
     def __str__(self):
         return f"Beneficiario {self.id_expediente.nombre} - {self.estatus}"
+    
+class Fotografias(models.Model):
+    id_foto = models.AutoField(primary_key=True)
+    link = models.URLField(max_length=500) 
+    descripcion = models.CharField(max_length=255, blank=True, null=True)
+    fecha_carga = models.DateField(auto_now_add=True)
+    etapa = models.CharField(max_length=50) # Ej. Visita Domiciliaria, Seguimiento
+
+    # Conexión 1 a MUCHOS con el expediente principal
+    id_expediente = models.ForeignKey(
+        Expediente, 
+        on_delete=models.CASCADE, 
+        db_column='id_expediente',
+        related_name='fotografias'
+    )
+
+    class Meta:
+        db_table = 'fotografias'

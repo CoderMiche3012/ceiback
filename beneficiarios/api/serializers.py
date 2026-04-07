@@ -66,28 +66,41 @@ class FotografiasSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+# Asegúrate de tener estas importaciones arriba de tu archivo:
+from estudios.models import Familia
+from estudios.api.serializers import FamiliaSerializer
+
 class ExpedienteSerializer(serializers.ModelSerializer):
-    # 1. Declaramos un campo calculado dinámico
-    familiares = serializers.SerializerMethodField()
-
-    class Meta:
-        model = Expediente
-        fields = '__all__'
-
-    # 2. Esta función va y busca a la familia en la otra app
-    def get_familiares(self, obj):
-        # Importamos aquí adentro para que Django no se confunda cruzando apps
-        from estudios.models import Familia
-        from estudios.api.serializers import FamiliaSerializer
-        
-        # Filtramos la familia que tenga el ID de este expediente
-        familiares_vinculados = Familia.objects.filter(id_expediente=obj.id_expediente)
-        
-        # Devolvemos la lista serializada
-        return FamiliaSerializer(familiares_vinculados, many=True).data
+    # 1. Nuestro campo que ahora permite leer y guardar al mismo tiempo
+    familia = FamiliaSerializer(many=True, required=False, write_only=True)
     
+    # Tus fotografías siguen igual (solo lectura)
     fotografias = FotografiasSerializer(many=True, read_only=True)
 
     class Meta:
         model = Expediente
         fields = '__all__'
+
+    def create(self, validated_data):
+        # 1. Sacamos la lista de la familia
+        familia_data = validated_data.pop('familia', [])
+
+        # 2. Creamos el Expediente usando el método "seguro" de DRF
+        expediente = super().create(validated_data)
+
+        # 3. Recorremos la lista y creamos a cada familiar
+        for integrante in familia_data:
+            # Le pasamos el objeto 'expediente' completo para que el ORM no se queje
+            Familia.objects.create(id_expediente=expediente, **integrante)
+        return expediente
+    
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        
+        # Filtramos la familia de este expediente
+        familiares_vinculados = Familia.objects.filter(id_expediente=instance.id_expediente)
+        
+        # La inyectamos en la respuesta
+        response['familia'] = FamiliaSerializer(familiares_vinculados, many=True).data
+        return response
+        

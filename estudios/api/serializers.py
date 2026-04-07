@@ -63,7 +63,7 @@ class SugerenciasSerializer(serializers.ModelSerializer):
 
 class EstudioSocioeconomicoSerializer(serializers.ModelSerializer):
     # 1. Anidamos todos los componentes (incluyendo los 3 nuevos)
-    familiares = FamiliaSerializer(many=True, required=False)
+    familiares = FamiliaSerializer(many=True, required=False, write_only=True)
     vivienda = ViviendaSerializer(required=False)
     gastos = GastosSerializer(required=False)
     alimentacion = AlimentacionSerializer(required=False)
@@ -121,3 +121,15 @@ class SugerenciasSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sugerencias
         exclude = ['id_estudio']
+
+def to_representation(self, instance):
+        # 1. Generamos el JSON normal que ya tienes (con vivienda, gastos, etc.)
+        response = super().to_representation(instance)
+        
+        # 2. Buscamos a los familiares que le pertenecen al expediente de este estudio
+        familiares_vinculados = Familia.objects.filter(id_expediente=instance.id_expediente)
+        
+        # 3. Los convertimos a JSON y los metemos a la fuerza en nuestra respuesta
+        response['familiares'] = FamiliaSerializer(familiares_vinculados, many=True).data
+        
+        return response

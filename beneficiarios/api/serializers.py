@@ -65,8 +65,27 @@ class FotografiasSerializer(serializers.ModelSerializer):
         model = Fotografias
         fields = '__all__'
 
+
 class ExpedienteSerializer(serializers.ModelSerializer):
-    # Agregamos esta línea para que devuelva la lista de fotos en modo lectura
+    # 1. Declaramos un campo calculado dinámico
+    familiares = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Expediente
+        fields = '__all__'
+
+    # 2. Esta función va y busca a la familia en la otra app
+    def get_familiares(self, obj):
+        # Importamos aquí adentro para que Django no se confunda cruzando apps
+        from estudios.models import Familia
+        from estudios.api.serializers import FamiliaSerializer
+        
+        # Filtramos la familia que tenga el ID de este expediente
+        familiares_vinculados = Familia.objects.filter(id_expediente=obj.id_expediente)
+        
+        # Devolvemos la lista serializada
+        return FamiliaSerializer(familiares_vinculados, many=True).data
+    
     fotografias = FotografiasSerializer(many=True, read_only=True)
 
     class Meta:

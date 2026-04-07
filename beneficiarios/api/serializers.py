@@ -49,6 +49,14 @@ class PostulanteSerializer(serializers.ModelSerializer):
             postulante_obj = Postulante.objects.create(id_expediente=expediente_obj, **validated_data)
 
             return postulante_obj
+    
+    def to_representation(self, instance):
+        response = super().to_representation(instance)
+        
+        if instance.id_expediente:
+            response['id_expediente']['id_expediente'] = instance.id_expediente.id_expediente
+            
+        return response
 
 class VisitaPostulanteSerializer(serializers.ModelSerializer):
     class Meta:
@@ -79,7 +87,7 @@ class ExpedienteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Expediente
-        fields = '__all__'
+        fields = ['id_expediente', 'nombre', 'apellido_p', 'apellido_m', 'familia', 'fotografias', 'id_direccion']
 
     def create(self, validated_data):
         # 1. Sacamos la lista de la familia
@@ -96,7 +104,7 @@ class ExpedienteSerializer(serializers.ModelSerializer):
     
     def to_representation(self, instance):
         response = super().to_representation(instance)
-        
+        response['id_expediente'] = instance.id_expediente
         # Filtramos la familia de este expediente
         familiares_vinculados = Familia.objects.filter(id_expediente=instance.id_expediente)
         

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from django.core.validators import RegexValidator
-from estudios.models import Estudio_Socioeconomico, Familia, Vivienda, Gastos, Alimentacion, Analisis, Situacion_Familiar, Servicios_Vivienda, Sugerencias
+from estudios.models import Estudio_Socioeconomico, Familia, Vivienda, Gastos, Alimentacion, Analisis, Situacion_Familiar, Servicios_Vivienda, Sugerencias, Expediente
 
 #VALIDACIONES 
 letras_regex = RegexValidator(
@@ -133,3 +133,15 @@ def to_representation(self, instance):
         response['familiares'] = FamiliaSerializer(familiares_vinculados, many=True).data
         
         return response
+
+class FamiliaSerializer(serializers.ModelSerializer):
+    # Añadimos o aseguramos que id_expediente pueda recibir el ID
+    # Usamos PrimaryKeyRelatedField para que acepte el número directamente
+    id_expediente = serializers.PrimaryKeyRelatedField(
+        queryset=Expediente.objects.all(), 
+        required=False
+    )
+
+    class Meta:
+        model = Familia
+        fields = '__all__'

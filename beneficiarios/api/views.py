@@ -3,7 +3,6 @@ from rest_framework.permissions import IsAuthenticated
 from beneficiarios.models import Direccion, Expediente, Postulante, Visita_Postulante, Beneficiario, Fotografias
 from .serializers import DireccionSerializer, ExpedienteSerializer, PostulanteSerializer, VisitaPostulanteSerializer, BeneficiarioSerializer, FotografiasSerializer
 
-
 class DireccionViewSet(viewsets.ModelViewSet):
     queryset = Direccion.objects.all()
     serializer_class = DireccionSerializer
@@ -17,14 +16,12 @@ class ExpedienteViewSet(viewsets.ModelViewSet):
 class PostulanteViewSet(viewsets.ModelViewSet):
     queryset = Postulante.objects.all()
     serializer_class = PostulanteSerializer
-    permission_classes = [IsAuthenticated] # O AllowAny si sigues haciendo pruebas sin token
+    permission_classes = [IsAuthenticated]
 
 class VisitaPostulanteViewSet(viewsets.ModelViewSet):
     queryset = Visita_Postulante.objects.all()
     serializer_class = VisitaPostulanteSerializer
     permission_classes = [IsAuthenticated]
-
-
 
 class BeneficiarioViewSet(viewsets.ModelViewSet):
     queryset = Beneficiario.objects.all()

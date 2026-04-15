@@ -77,7 +77,7 @@ class Postulante(models.Model):
 
 class Visita_Postulante(models.Model):
     id_visita = models.AutoField(primary_key=True)
-    fecha_visita = models.DateTimeField() # DateTime para incluir hora de la cita
+    fecha_visita = models.DateTimeField() 
     estado_visita = models.CharField(max_length=50, default='Programada')
     nota_visita = models.TextField(null=True, blank=True)
     
@@ -100,9 +100,8 @@ class Beneficiario(models.Model):
     id_beneficiario = models.AutoField(primary_key=True)
     estatus = models.CharField(max_length=20, default='Activo')
     notas = models.TextField(null=True, blank=True)
-    fecha_ingreso = models.DateField(auto_now_add=True) # Se llena solito con la fecha de hoy
+    fecha_ingreso = models.DateField(auto_now_add=True)
     
-    # Lo enlazamos al mismo Expediente original (¡para no duplicar datos!)
     id_expediente = models.ForeignKey(
         Expediente, 
         on_delete=models.CASCADE, 

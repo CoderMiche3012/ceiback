@@ -26,7 +26,7 @@ class ExpedienteSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Expediente
-        # Ojo: Quitamos 'id_direccion' y ponemos 'direccion' (el objeto anidado)
+        
         fields = ['nombre', 'apellido_p', 'apellido_m', 'fecha_nacimiento', 'telefono', 'genero', 'correo', 'nota_situacion_familiar', 'id_direccion']
 
 class PostulanteSerializer(serializers.ModelSerializer):

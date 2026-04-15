@@ -1,13 +1,17 @@
 from rest_framework import viewsets
 from rest_framework.permissions import IsAuthenticated
-from estudios.models import Estudio_Socioeconomico, Familia
-from .serializers import EstudioSocioeconomicoSerializer, FamiliaSerializer
+from estudios.models import EstudioSocioeconomico, Familia, Analisis
+from .serializers import EstudioSocioeconomicoSerializer, FamiliaSerializer, AnalisisSerializer
 
 class EstudioSocioeconomicoViewSet(viewsets.ModelViewSet):
-    queryset = Estudio_Socioeconomico.objects.all()
+    queryset = EstudioSocioeconomico.objects.all()
     serializer_class = EstudioSocioeconomicoSerializer
-    permission_classes = [IsAuthenticated] # O AllowAny para pruebas
+    permission_classes = [IsAuthenticated]
 
 class FamiliaViewSet(viewsets.ModelViewSet):
     queryset = Familia.objects.all()
     serializer_class = FamiliaSerializer
+
+class AnalisisViewSet(viewsets.ModelViewSet):
+    queryset = Analisis.objects.all()
+    serializer_class = AnalisisSerializer

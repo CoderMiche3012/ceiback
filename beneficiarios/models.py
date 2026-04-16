@@ -17,7 +17,7 @@ class Direccion(models.Model):
     def __str__(self):
         return f"{self.calle} {self.numero}, {self.colonia}"
 
-
+#no manda los demas campos 
 class Expediente(models.Model):
     id_expediente = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=20)
@@ -47,21 +47,17 @@ class Expediente(models.Model):
 
 class Postulante(models.Model):
     id_postulante = models.AutoField(primary_key=True)
-    # Le ponemos un valor por defecto para que al crearlo siempre empiece en "Pendiente" o "En Revisión"
     estatus = models.CharField(max_length=50, default='Pendiente')
-    
-    # Relación con el Expediente
     id_expediente = models.ForeignKey(
         Expediente, 
-        on_delete=models.CASCADE, # Si borran el expediente, se borra el postulante
+        on_delete=models.CASCADE,
         db_column='id_expediente',
         related_name='postulantes'
     )
     
-    # Relación con el Usuario (Quien lo registró o le dará seguimiento)
     id_usuario = models.ForeignKey(
         settings.AUTH_USER_MODEL, 
-        on_delete=models.SET_NULL, # Si borran a la trabajadora social, el postulante no desaparece
+        on_delete=models.SET_NULL, 
         null=True, 
         db_column='id_usuario',
         related_name='postulantes_asignados'

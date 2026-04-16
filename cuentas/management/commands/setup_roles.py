@@ -8,7 +8,7 @@ class Command(BaseCommand):
         self.stdout.write("Iniciando la configuración de roles y permisos...")
 
 
-        modulos = ['Beneficiarios', 'Donadores', 'Postulantes', 'Cursos', 'Reportes',
+        modulos = ['Beneficiarios', 'Donadores', 'Postulantes', 'Reportes',
                     'Usuarios', 'Roles', 'Permisos', 'Periodos', 'Estudios']
         acciones = ['Ver', 'Crear', 'Editar', 'Eliminar']
 
@@ -28,8 +28,8 @@ class Command(BaseCommand):
         # 3. Crear los Roles de tu diseño
         roles_data = [
             {'nombre': 'Administrador', 'desc': 'Acceso total al sistema'},
-            {'nombre': 'Trabajadora Social', 'desc': 'Gestión de beneficiarios'},
-            {'nombre': 'Coordinación', 'desc': 'Supervisión y reportes'},
+            {'nombre': 'Trabajadora Social', 'desc': 'Gestión de estudios'},
+            {'nombre': 'Coordinación', 'desc': 'Gestión de beneficairios y reportes'},
             {'nombre': 'Mesa Directiva', 'desc': 'Sólo lectura y auditoría'},
         ]
 
@@ -48,9 +48,8 @@ class Command(BaseCommand):
                 # Solo permisos de "Ver"
                 permisos_lectura = [p for nombre, p in permisos_creados.items() if nombre.startswith('Ver')]
                 rol.permisos.set(permisos_lectura)
-                
-            # Puedes ir agregando los 'elif' para configurar exactamente qué permisos 
-            # lleva la Trabajadora Social, Coordinación, etc.
+
+            #añadir mas permisos por area
 
             self.stdout.write(self.style.SUCCESS(f'Rol configurado: {rol.nombre_rol}'))
 

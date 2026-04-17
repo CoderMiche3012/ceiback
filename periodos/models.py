@@ -13,3 +13,6 @@ class Periodo(models.Model):
 
     def __str__(self):
         return f"Ciclo {self.ciclo_escolar} - {'Activo' if self.estado else 'Inactivo'}"
+    
+
+    

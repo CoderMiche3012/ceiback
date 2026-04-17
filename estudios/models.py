@@ -39,11 +39,10 @@ class Familia(models.Model):
     id_familia = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=25)
     apellido_p = models.CharField(max_length=25)
-    apellido_m = models.CharField(max_length=25)
+    apellido_m = models.CharField(max_length=25, null=True, blank=True)
     parentesco = models.CharField(max_length=50)
     edad = models.IntegerField()
     actividad_principal = models.CharField(max_length=100)
-    area_laboral_escuela = models.CharField(max_length=100, null=True, blank=True)
     #lo cambie a string 
     salario = models.CharField(max_length=100, null=True, blank=True)
     vive_en_casa = models.BooleanField(default=True)

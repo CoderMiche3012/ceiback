@@ -22,7 +22,7 @@ class Expediente(models.Model):
     id_expediente = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=20)
     apellido_p = models.CharField(max_length=15)
-    apellido_m = models.CharField(max_length=15)
+    apellido_m = models.CharField(max_length=15, null=True, blank=True)
     fecha_nacimiento = models.DateField()
     telefono = models.CharField(max_length=10, null=True, blank=True)
     genero = models.CharField(max_length=15)

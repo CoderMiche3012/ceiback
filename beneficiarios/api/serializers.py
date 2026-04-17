@@ -25,7 +25,7 @@ class FotografiasSerializer(serializers.ModelSerializer):
 class ExpedienteSerializer(serializers.ModelSerializer):
     nombre = serializers.CharField(validators=[letras_regex])
     apellido_p = serializers.CharField(validators=[letras_regex])
-    apellido_m = serializers.CharField(validators=[letras_regex])
+    apellido_m = serializers.CharField(validators=[letras_regex], required=False, allow_blank=True, allow_null=True)
     telefono = serializers.CharField(validators=[telefono_regex], required=False, allow_blank=True, allow_null=True)
     
     # Anidaciones

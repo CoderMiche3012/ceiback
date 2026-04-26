@@ -33,7 +33,7 @@ class UsuarioManager(BaseUserManager):
             
         correo = self.normalize_email(correo)
         user = self.model(nom_usuario=nom_usuario, correo=correo, **extra_fields)
-        user.set_password(password) # Esto maneja tu campo de 'contraseña'
+        user.set_password(password) 
         user.save(using=self._db)
         return user
 

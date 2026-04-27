@@ -5,18 +5,20 @@ from periodos.models import Periodo
 class Donador(models.Model):
     #los 3 tipos de donadores que hay 
     TIPO_CHOICES = [
-        ('Individual', 'Individual'),
-        ('Empresa', 'Empresa'),
-        ('Institución', 'Institución'),
+        ('CEI', 'CEI'),
+        ('CANFRO', 'CANFRO'),
+        ('OYE', 'OYE'),
     ]
 
     id_donador = models.AutoField(primary_key=True)
     nombre = models.CharField(max_length=100)
-    tipo = models.CharField(max_length=20, choices=TIPO_CHOICES, default='Individual')
+    apellido_p = models.CharField(max_length=20, null=True, blank=True )
+    apellido_m = models.CharField(max_length=20, null=True, blank=True )
+    tipo = models.CharField(max_length=20, choices=TIPO_CHOICES, default='CEI')
     correo = models.EmailField(max_length=50, null=True, blank=True)
     telefono = models.CharField(max_length=15, null=True, blank=True)
     estatus = models.CharField(max_length=20, default='Activo')
-    fecha_ingreso = models.DateField(auto_now_add=True)
+    fecha_ingreso = models.DateField() #quiero fecha personalizada
     nota = models.TextField(null=True, blank=True)
     calle = models.CharField(max_length=100, null=True, blank=True)
     numero = models.CharField(max_length=10, null=True, blank=True)
@@ -38,7 +40,8 @@ class Donador(models.Model):
         verbose_name_plural = 'Donadores'
 
     def __str__(self):
-        return f"{self.nombre} ({self.tipo})"
+        apellido = f" {self.apellido_p}" if self.apellido_p else ""
+        return f"{self.nombre}{apellido} ({self.tipo})"
 
 class DonativoDonador(models.Model):
     id_donativo = models.AutoField(primary_key=True)
